@@ -179,6 +179,60 @@ def _get_company_info(
         }
 
 
+def _compare_stocks(
+    symbol1: str,
+    symbol2: str
+) -> Dict[str, Any]:
+    """Compare two stocks side-by-side.
+
+    Args:
+        symbol1: First stock symbol (e.g., 'AAPL')
+        symbol2: Second stock symbol (e.g., 'MSFT')
+
+    Returns:
+        Dictionary with comparison data for both stocks
+    """
+    try:
+        stock1_price = _get_stock_price(symbol1)
+        stock2_price = _get_stock_price(symbol2)
+        
+        info1 = _get_company_info(symbol1)
+        info2 = _get_company_info(symbol2)
+        
+        def format_cap(cap):
+            if not cap: return "N/A"
+            if cap >= 1e12: return f"{cap/1e12:.1f}T"
+            elif cap >= 1e9: return f"{cap/1e9:.1f}B"
+            elif cap >= 1e6: return f"{cap/1e6:.1f}M"
+            return str(cap)
+
+        return {
+            "comparison": {
+                "symbol1": symbol1.upper(),
+                "symbol2": symbol2.upper(),
+                "stock1": {
+                    "symbol": symbol1.upper(),
+                    "current_price": stock1_price.get("current_price"),
+                    "company_name": stock1_price.get("name"),
+                    "market_cap": format_cap(info1.get("market_cap"))
+                },
+                "stock2": {
+                    "symbol": symbol2.upper(),
+                    "current_price": stock2_price.get("current_price"),
+                    "company_name": stock2_price.get("name"),
+                    "market_cap": format_cap(info2.get("market_cap"))
+                }
+            }
+        }
+    except Exception as e:
+        logger.error(f"Error comparing stocks {symbol1} and {symbol2}: {e}")
+        return {
+            "error": str(e),
+            "symbol1": symbol1.upper(),
+            "symbol2": symbol2.upper()
+        }
+
+
 # Tool definitions for Strands agent
 STOCK_TOOLS = [
     {
@@ -230,6 +284,25 @@ STOCK_TOOLS = [
             "required": ["ticker"]
         },
         "function": _get_company_info
+    },
+    {
+        "name": "compare_stocks",
+        "description": "Compare two stocks side-by-side.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "symbol1": {
+                    "type": "string",
+                    "description": "First stock symbol to compare"
+                },
+                "symbol2": {
+                    "type": "string",
+                    "description": "Second stock symbol to compare"
+                }
+            },
+            "required": ["symbol1", "symbol2"]
+        },
+        "function": _compare_stocks
     }
 ]
 

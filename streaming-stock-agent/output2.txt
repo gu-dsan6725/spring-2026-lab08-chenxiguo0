@@ -1,0 +1,26 @@
+Session: cli_session
+Query: Compare Tesla and Ford
+------------------------------------------------------------
+
+[Tool calls starting...]
+
+[Calling tool: compare_stocks with args {'symbol1': 'TSLA', 'symbol2': 'F'}]
+[Tool calls completed]
+
+Here's the comparison between Tesla (TSLA) and Ford (F) as of 16:15 EST:
+
+**Tesla, Inc. (TSLA)**
+- Stock Price: $381.26
+- Market Cap: $1.4 trillion
+
+**Ford Motor Company (F)**
+- Stock Price: $11.68
+- Market Cap: $46.8 billion
+
+Tesla's market cap is over 30x larger than Ford's despite being a much newer company (founded in 2003 vs. Ford's 1903 founding). The stark price difference reflects both companies' different capital structures and market perceptions of growth potential. Tesla dominates in electric vehicles while Ford focuses more on traditional internal combustion engines currently.
+
+Data is from Yahoo Finance and may have a slight delay. Would you like details about their business models or recent performance?
+[Done]
+
+============================================================
+
